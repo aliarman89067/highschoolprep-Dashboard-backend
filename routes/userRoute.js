@@ -378,15 +378,14 @@ router.get("/logout-user", async (req, res) => {
   try {
     const token = req.cookies.HSPadminId;
     if (!token) {
-      res.clearCookie("HSPadminId");
+      res.clearCookie("HSPadminId", { sameSite: "none", secure: true });
       return res.status(404).json({
         success: false,
         message: "Token not found but still removed",
       });
     }
 
-    res.clearCookie("HSPadminId", { sameSite: "none" });
-    res.cookie("HSPadminId", "", { sameSite: "none" });
+    res.clearCookie("HSPadminId", { sameSite: "none", secure: true });
     res.status(200).json({ success: true, message: "Token was deleted" });
   } catch (error) {
     console.log(error);
