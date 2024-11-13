@@ -333,7 +333,7 @@ function formatDate(date) {
 
 router.get("/check-admin", async (req, res) => {
   try {
-    const token = req.cookies.highschoolprepadminId;
+    const token = req.cookies.HSPadminId;
     if (!token)
       return res
         .status(404)
@@ -356,9 +356,9 @@ router.post("/login-admin", async (req, res) => {
     const { email, password } = req.body;
     if (email === "admin@gmail.com" && password === "admin") {
       const token = jwt.sign({ email, password }, process.env.JWT_SECRET);
-      res.cookie("highschoolprepadminId", token, {
-        secure: process.env.NODE_ENV === "production",
+      res.cookie("HSPadminId", token, {
         httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "none",
       });
       res
@@ -376,16 +376,17 @@ router.post("/login-admin", async (req, res) => {
 
 router.get("/logout-user", async (req, res) => {
   try {
-    const token = req.cookies.highschoolprepadminId;
+    const token = req.cookies.HSPadminId;
     if (!token) {
-      res.clearCookie("highschoolprepadminId");
+      res.clearCookie("HSPadminId");
       return res.status(404).json({
         success: false,
         message: "Token not found but still removed",
       });
     }
 
-    res.clearCookie("highschoolprepadminId");
+    res.clearCookie("HSPadminId");
+    res.cookie("HSPadminId", "");
     res.status(200).json({ success: true, message: "Token was deleted" });
   } catch (error) {
     console.log(error);
