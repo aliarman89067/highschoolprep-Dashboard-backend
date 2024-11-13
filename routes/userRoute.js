@@ -385,8 +385,8 @@ router.get("/logout-user", async (req, res) => {
       });
     }
 
-    res.clearCookie("HSPadminId");
-    res.cookie("HSPadminId", "");
+    res.clearCookie("HSPadminId", { sameSite: "none" });
+    res.cookie("HSPadminId", "", { sameSite: "none" });
     res.status(200).json({ success: true, message: "Token was deleted" });
   } catch (error) {
     console.log(error);
