@@ -378,24 +378,14 @@ router.get("/logout-user", async (req, res) => {
   try {
     const token = req.cookies.highschoolprepadminId;
     if (!token) {
-      res.cookie("highschoolprepadminId", "", {
-        maxAge: 0,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
-      });
+      res.cookie("highschoolprepadminId", "");
       return res.status(404).json({
         success: false,
         message: "Token not found but still removed",
       });
     }
 
-    res.cookie("highschoolprepadminId", "", {
-      maxAge: 0,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
-    });
+    res.cookie("highschoolprepadminId", "");
     res.status(200).json({ success: true, message: "Token was deleted" });
   } catch (error) {
     console.log(error);
