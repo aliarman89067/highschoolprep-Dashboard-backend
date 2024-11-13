@@ -358,7 +358,7 @@ router.post("/login-admin", async (req, res) => {
       const token = jwt.sign({ email, password }, process.env.JWT_SECRET);
       res.cookie("HSPadminId", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
         sameSite: "none",
       });
       res
