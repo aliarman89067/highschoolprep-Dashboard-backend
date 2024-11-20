@@ -2,6 +2,8 @@ import express from "express";
 import UserModel from "../models/User.js";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import TrafficModel from "../models/Traffic.js";
+import CareerModel from "../models/Career.js";
 
 const router = express.Router();
 
@@ -361,6 +363,7 @@ router.post("/login-admin", async (req, res) => {
         secure: true,
         sameSite: "none",
       });
+
       res
         .status(201)
         .json({ success: true, message: "User login successfully" });
@@ -390,6 +393,170 @@ router.get("/logout-user", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+router.get("/number-today", async (req, res) => {
+  try {
+    // Today Start
+    const todayStart = new Date();
+    todayStart.setUTCHours(0, 0, 0, 0);
+    todayStart.toISOString();
+
+    // Today End
+    const todayEnd = new Date();
+    todayEnd.setUTCHours(23, 59, 59, 999);
+    todayEnd.toISOString();
+
+    const users = await UserModel.find({
+      createdAt: { $gte: todayStart, $lte: todayEnd },
+    }).countDocuments();
+
+    const payments = await UserModel.find({
+      createdAt: { $gte: todayStart, $lte: todayEnd },
+      isPremium: true,
+    }).countDocuments();
+
+    const careerForms = await CareerModel.find({
+      createdAt: { $gte: todayStart, $lte: todayEnd },
+    }).countDocuments();
+
+    const traffics = await TrafficModel.find({
+      createdAt: { $gte: todayStart, $lte: todayEnd },
+    }).countDocuments();
+
+    res.status(200).json({
+      users,
+      payments,
+      careerForms,
+      traffics,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/number-week", async (req, res) => {
+  try {
+    // Today Start
+    const todayStart = new Date();
+    todayStart.setUTCHours(0, 0, 0, 0);
+    todayStart.toISOString();
+
+    // Today End
+    const weekEnd = new Date();
+    weekEnd.setDate(weekEnd.getDate() - 7);
+    weekEnd.setUTCHours(23, 59, 59, 999);
+    weekEnd.toISOString();
+
+    const users = await UserModel.find({
+      createdAt: { $gte: weekEnd, $lte: todayStart },
+    }).countDocuments();
+
+    const payments = await UserModel.find({
+      createdAt: { $gte: weekEnd, $lte: todayStart },
+      isPremium: true,
+    }).countDocuments();
+
+    const careerForms = await CareerModel.find({
+      createdAt: { $gte: weekEnd, $lte: todayStart },
+    }).countDocuments();
+
+    const traffics = await TrafficModel.find({
+      createdAt: { $gte: weekEnd, $lte: todayStart },
+    }).countDocuments();
+
+    res.status(200).json({
+      users,
+      payments,
+      careerForms,
+      traffics,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/number-month", async (req, res) => {
+  try {
+    // Today Start
+    const todayStart = new Date();
+    todayStart.setUTCHours(0, 0, 0, 0);
+    todayStart.toISOString();
+
+    // Today End
+    const monthEnd = new Date();
+    monthEnd.setUTCDate(1);
+    monthEnd.setUTCHours(23, 59, 59, 999);
+    monthEnd.toISOString();
+
+    const users = await UserModel.find({
+      createdAt: { $gte: monthEnd, $lte: todayStart },
+    }).countDocuments();
+
+    const payments = await UserModel.find({
+      createdAt: { $gte: monthEnd, $lte: todayStart },
+      isPremium: true,
+    }).countDocuments();
+
+    const careerForms = await CareerModel.find({
+      createdAt: { $gte: monthEnd, $lte: todayStart },
+    }).countDocuments();
+
+    const traffics = await TrafficModel.find({
+      createdAt: { $gte: monthEnd, $lte: todayStart },
+    }).countDocuments();
+
+    res.status(200).json({
+      users,
+      payments,
+      careerForms,
+      traffics,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/number-year", async (req, res) => {
+  try {
+    // Today Start
+    const todayStart = new Date();
+    todayStart.setUTCHours(0, 0, 0, 0);
+    todayStart.toISOString();
+
+    // Today End
+    const yearEnd = new Date();
+    yearEnd.setUTCMonth(0);
+    yearEnd.setUTCDate(1);
+    yearEnd.setUTCHours(23, 59, 59, 999);
+    yearEnd.toISOString();
+
+    const users = await UserModel.find({
+      createdAt: { $gte: yearEnd, $lte: todayStart },
+    }).countDocuments();
+
+    const payments = await UserModel.find({
+      createdAt: { $gte: yearEnd, $lte: todayStart },
+      isPremium: true,
+    }).countDocuments();
+
+    const careerForms = await CareerModel.find({
+      createdAt: { $gte: yearEnd, $lte: todayStart },
+    }).countDocuments();
+
+    const traffics = await TrafficModel.find({
+      createdAt: { $gte: yearEnd, $lte: todayStart },
+    }).countDocuments();
+
+    res.status(200).json({
+      users,
+      payments,
+      careerForms,
+      traffics,
+    });
+  } catch (error) {
+    console.log(error);
   }
 });
 
